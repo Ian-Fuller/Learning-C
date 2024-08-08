@@ -1,0 +1,2 @@
+I would test the word count program by typing proper sentences to make sure it handles regular input the way it should, but I would also test it with improper sentences, such as text with extra and unnecessary whitspace, or even ASCII art, just to make sure the program can handle user mistakes or input that was intentionally made to be unusual.
+The progam was designed to deal with regular language, so I would imagine that the aforementioned improper sentences and ASCII art would be likely to cause some bugs.

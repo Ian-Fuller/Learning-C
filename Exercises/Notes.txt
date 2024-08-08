@@ -1,0 +1,3 @@
+To compile: clang [file name]
+To run: a.exe
+To exit a loop that uses [(c = getchar()) != EOF], enter [etrl + z] on a new line and press enter
