@@ -1,0 +1,63 @@
+// get line from the user
+// go through each word to find the longest
+// use the longest word to determine the number of spaces that need to be between each word
+// replace tabs in the line with the correct number of spaces
+
+include
+
+define size 200
+
+int getline function(line)
+int getlongest function(line)
+
+main function()
+	while (true)
+		int line[size]
+		int length
+		if ((length = getline(line)) = 0)
+			return 0
+
+		int tabSpaces = getlongest(line) + 1
+
+		int i
+		for (i = 0; i < length; ++i)
+			if (line[i] != '\t')
+				printf(line[i]
+			else
+				int j
+				for (j = 0; j <= tabSpaces; ++j)
+					printf(" ")
+
+getline function(line)
+	int length
+	int c
+
+	while ((c = getchar()) != '\n')
+		line[i] = c;
+		++length
+	line[i] = c
+	++length
+
+	return length
+
+getlongest function(line)
+	int current
+	int longest
+	
+	int i
+	while (line[i] != '\n')
+		if (line[i] != ' ' && line[i] != '\t')
+			++current
+		else
+			current = 0
+
+		if (current > longest)
+			longest = current
+
+		++i
+
+	return longest
+
+		
+
+		
