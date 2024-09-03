@@ -1,0 +1,57 @@
+// get a line from the user
+// use a line limit to determine how much of that line id printed out at a time
+// print out each word individually. If a word exceeds the line limit, jump to the next line
+
+include
+
+define size 200
+
+int getline function(line)
+
+main function()
+	while (true)
+		char line[size]
+		char output[size * 2]
+		int limit = size / 10;
+		int length = getline(line);
+
+		if (length > 1)
+			int current = 0
+
+			int i
+			int j
+			for (int i = 0; i < length; ++i)
+//------------------------------|--------------------------------------------------
+//				if (line[i] != ' ' || line[i] != '\t')
+//					print(line[i])
+//				else
+//					if (current < limit)
+//						print('\n')
+//					else
+//						print(line[i])
+//------------------------------|--------------------------------------------------
+				if (current < limit)
+					output[j] = line[i]
+					++current
+				else
+					int diff = 0;
+					while (line[i - diff] != ' ' && line[i - diff] != '\t')
+						++diff
+						output[j - diff] = ' '
+					output[j] = '\n'
+					current = 0
+				++j
+	
+	return 0		
+
+getline function(line)
+	int length
+	int c
+
+	while ((c = getchar()) != '\n')
+		line[i] = c;
+		++length
+	line[i] = c
+	++length
+
+	return length
