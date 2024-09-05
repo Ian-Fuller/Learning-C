@@ -19,18 +19,23 @@ int main() {
 			for (i = 0; i < length; ++i) {
 				if (current < limit) {
 					output[j] = line[i];
+					++j;
 					++current;
 				}
 				else {
 					int diff = 0;
 					while (line[i - diff] != ' ' && line[i - diff] != '\t') {
-						++diff;
 						output[j - diff] = ' ';
-					output[j] = '\n';
-					current = 0;
+						++diff;
 					}
+					output[j] = '\n';
+					while (diff >= 0) {
+						++j;
+						--diff;
+						output[j] = line[i - diff];
+					}
+					current = 0;
 				}
-				++j;
 			}
 			length = j;
 		}
@@ -39,6 +44,7 @@ int main() {
 		for (i = 0; i < length; ++i) {
 			printf("%c", output[i]);
 		}
+		printf("\n");
 	}
 
 	return 0;
@@ -48,13 +54,12 @@ int getline(char line[]) {
 	int length;
 	int c;
 
-	int i = 0;
 	while ((c = getchar()) != '\n') {
-		line[i] = c;
+		line[length] = c;
 		++length;
 	}
-	line[i] = c;
 	++length;
+	line[length] = c;
 
 	return length;
 }
