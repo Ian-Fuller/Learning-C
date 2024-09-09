@@ -51,14 +51,13 @@ int main() {
 }
 
 int getline(char line[]) {
-	int length;
+	int length = 0;
 	int c;
 
 	while ((c = getchar()) != '\n') {
 		line[length] = c;
 		++length;
 	}
-	++length;
 	line[length] = c;
 
 	return length;
