@@ -27,17 +27,13 @@ int main() {
 				while(input[i] != '\n') {
 					++i;
 				}
-				++i;
 			}
 			else if (input[i + 1] == '*') { // the comment is multi-line
-				while(input[i + 1] != '\n' && input[i + 1] != '/') { // while the comment has not ended
+				while(!(input[i] == '*' && input[i + 1] == '/')) { // while the comment has not ended
 					++i;
 				}
 				++i;
 				++i;
-				if (input[i] == '\n') { // exclude the newline character if one has been found
-					++i;
-				}
 			}
 		}
 
