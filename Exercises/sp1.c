@@ -3,7 +3,12 @@
 #define SIZE 2000
 
 int main() {
-	int            a	= 5   ;
-	printf("Variable \"a\" is equal to %d"  , 	a);
+	printf("%d\n", 1 % 2);
+	printf("%d\n", 2 % 2);
+	printf("%d\n", 3 % 2);
+	printf("%d\n", 4 % 2);
+	printf("%d\n", 5 % 2);
+	printf("%d\n", 6 % 2);
+
 	return 0;
 }
