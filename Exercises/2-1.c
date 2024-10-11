@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <float.h>
+#include <math.h>
 
 int main() {
     printf("Integer ranges from library:\n");
@@ -47,9 +48,9 @@ int main() {
 
     printf("Floating point ranges from computation:\n");
     // float
-    printf("\tFloat: %f to %f\n", FLT_MIN, FLT_MAX);
+    printf("\tFloat: %f to %f\n", -1.175494351 * pow(10, 37), 3.402823466 * pow(10, 38));
     // double
-    printf("\tDouble: %lf to %lf\n", DBL_MIN, DBL_MAX);
+    printf("\tDouble: %lf to %lf\n", -2.2250738585072014 * pow(10, 308), 1.7976931348623158 * pow(10, 308));
 
     return 0;
 }
