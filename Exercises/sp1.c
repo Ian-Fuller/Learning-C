@@ -1,8 +1,6 @@
 #include <stdio.h>
 
-#define SIZE 2000
-
 int main() {
-	int i = 10000000000;
+	int i = 15 * (16 << (0));
 	printf("%d", i);
 }

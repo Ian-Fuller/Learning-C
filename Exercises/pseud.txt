@@ -1,98 +1,44 @@
-Use getchar() to get input from the user
-Locate unbalanced (), [], {}, '', ""
-	Needs to search for both opening and closing characters
-		If an opening character is found, the program will search for a closing character
-		If a closing character is found, that will be an automatic imbalance since it hasn't already been paired by a search for an opening character
-	An additional array will be needed to keep track of which characters are paired to eachother, that way none of the characters will have duplicate pairings
-	If a closing character is found without a pair, this will be an automatic imbalance
-	Since quotes don't have opening or closing chaacters, the program will simply count the program as imbalanced if an uneven count has been found
-Ignore imbalances them if they are within escape sequences or comments
-	Detect escape sequences by checking if the character has a '\' in front of it
-	Use the code from the last exercise with an "inComment" variable to detemine if a character should be ignored
-If any imbalance has been found, notify the user that the program contains imbalances.
+include stdio
+include ctype
+include string
 
-================================================================================
+constant SIZE 6
 
-SIZE = 2000
+prot int htoi(char s[])
 
-func main()
-	char input[SIZE]
-	char pairs[SIZE]
-	int length = 0
-	int pairCounter = 0
-	int inComment = 0
-	int imbalanceFound = 0
-	int sQuoteCount = 0
-	int dQuoteCount = 0
+prot int getline()
 
+func main
+	char line[SIZE]
+	int len
+
+	while ((len = getline(line)) > 0)
+		printf("%d\n", htoi(line))
+
+func int htoi(char s[])
+	int len = strlen(s) - 1 // max 6
+	
+	int total = 0
 	int i
-	for (i = 0; i < SIZE; ++i)
-		pairs[i] = 0
+	for (i = len; i >= 0; i--)
+		if (isdigit(line[i]))
+			total += (line[i] - '0') * 16^(len - i)
+		else if (line[i] >= 'A' && line[i] <= 'F')
+			total += (line[i] - 'A' + 10) * 16^(len - i)
+		else if (line[i] >= 'a' && line[i] <= 'F')
+			total += (line[i] - 'a' + 10) * 16^(len - i)
+	
+	return total
 
-	i = 0
-	int c
-	while ((c = getchar()) != EOF)
-		input[i] = c
-		++length
+func int getline(char line[])
+	int len = 0;
+	int c;
 
-	for (i = 0; i < length; ++i)
-		if (input[i] == '/' && input[i + 1] == '/')
-			inComment = 1
-		else if (input[i] == '/' && input[i + 1] == '*')
-			inComment = 1
-		else if (input[i] == '\n')
-			inComment = 0
-		else if (input[i] == '*' && input[i + 1] == '/')
-			inComment = 0
-			++i
-			++i
-
-		if (inComment == 0)
-			// opening
-			if (input[i] == '(')
-				int j = 1
-				while ((i + j) != ')' && (i + j) != EOF)
-					++j
-				if ((i + j) == ')')
-					++pairCounter
-					input[i] = pairCounter
-					input[j] = pairCounter
-				else
-					imbalanceFound = 1
-			else if (input[i] == '[')
-				int j = 1
-				while ((i + j) != ']' && (i + j) != EOF)
-					++j
-				if ((i + j) == ']')
-					++pairCounter
-					input[i] = pairCounter
-					input[j] = pairCounter
-				else
-					imbalanceFound = 1
-			else if (input[i] == '{')
-				int j = 1
-				while ((i + j) != '}' && (i + j) != EOF)
-					++j
-				if ((i + j) == '}')
-					++pairCounter
-					input[i] = pairCounter
-					input[j] = pairCounter
-				else
-					imbalanceFound = 1
-			// closing
-			else if (input[i] == ')' && pairs[i] == 0)
-				imbalanceFound = 1
-			else if (input[i] == ']' && pairs[i] == 0)
-				imbalanceFound = 1
-			else if (input[i] == '}' && pairs[i] == 0)
-				imbalanceFound = 1
-			// quotes
-			else if (input[i] == '\'')
-				++sQuoteCount
-			else if (input[i] == '\"')
-				++dQuoteCount
-
-	if (imbalanceFound > 0 || sQuoteCount % 2 = 1 || dQuoteCount % 2 = 1)
-		print("Program contains one or more errors.")
-	else
-		print("Program contains no errors.")
+	while ((c = getchar()) != '\n' && (c = getchar()) != EOF)
+		line[len] = c
+		len++;
+	if(c == '\n')
+		line[len] = c;
+		len++;
+	
+	return len;
