@@ -6,6 +6,7 @@
 #define SIZE 6
 
 int getline(char line[]);
+void clearstr(char s[]);
 int htoi(char s[]);
 
 int main() {
@@ -14,6 +15,7 @@ int main() {
 
     while ((len = getline(line)) > 0) {
         printf("%d\n", htoi(line));
+        clearstr(line);
     }
 
     return 0;
@@ -29,6 +31,14 @@ int getline(char line[]) {
     }
 
     return len;
+}
+
+void clearstr(char s[]) {
+    int i;
+    int len = strlen(s);
+    for (i = 0; i < len; i++) {
+        s[i] = '\0';
+    }
 }
 
 int htoi(char s[]) {
