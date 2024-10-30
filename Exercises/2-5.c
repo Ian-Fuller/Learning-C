@@ -1,25 +1,24 @@
 #include <stdio.h>
 
-void squeeze(char s1[], char s2[]);
+int any(char s1[], char s2[]);
 
 int main() {
     char s1[] = "The quick red fox jumped over the lazy dog.";
 	char s2[] = "Red leather, yellow leather.";
 
-	squeeze(s1, s2);
-
-    int i = 0;
-	while (s1[i] != '\0') {
-        printf("%c", s1[i]);
-        i++;
+    int pos = any(s1, s2);
+    if (pos == -1) {
+        printf("s1 does not contain any characters from s2.\n");
+    }
+    else {
+        printf("A character from s2 first occurs at: %d in s1.\n", any(s1, s2));
     }
 
     return 0;
 }
 
-void squeeze(char s1[], char s2[]) {
+int any(char s1[], char s2[]) {
     int i = 0;
-    int k = 0;
     while (s1[i] != '\0') {
         int match = 0;
         int j = 0;
@@ -29,11 +28,11 @@ void squeeze(char s1[], char s2[]) {
             }
             j++;
         }
-        if (match == 0) {
-            s1[k] = s1[i];
-            k++;
+        if (match == 1) {
+            return i;
         }
         i++;
     }
-    s1[k] = '\0';
+
+    return -1;
 }
