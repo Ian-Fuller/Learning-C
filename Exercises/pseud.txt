@@ -1,17 +1,10 @@
+uint setbits(uint x, int p, int n, uint y)
+
 int main
-	char s1 = "The quick red fox jumped over the lazy dog."
-	char s2 = "Red leather, yellow leather.
+	uint x = 37
+	uint y = 21
+	printf("%d\n", setbits(x, 4, 3, y))
 
-	squeeze(s1, s2)
-
-	print(s1)
-
-void squeeze(char s1[], char s2[])
-	int i
-	int k
-	while (s1[i++] != '\0')
-		int j
-		while (s2[j++] != '\0')
-			if (s1[i] != s2[j])
-				s1[k++] = s1[i]
-	s1[i] = '\n' 
+uint setbits(uint x, int p, int n, uint y)
+	// replace bits
+	return (x >> (p + 1 - n)) & ~(~0 << n)

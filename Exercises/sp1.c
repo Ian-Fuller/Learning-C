@@ -1,18 +1,18 @@
 #include <stdio.h>
 
-void squeeze(char s[], int c);
+unsigned getbits(unsigned x, int p, int n);
 
 int main() {
-	// stuff
+	printf("%d\n", getbits(15, 4, 4));
 }
 
-void squeeze(char s[], int c) {
-	int i, j;
-
-	for (i = j = 0; s[i] != '\0'; i++) {
-		if (s[i] != c) {
-			s[j++] = s[i];
-		}
+unsigned getbits(unsigned x, int p, int n) {
+	int rShift = p + 1 - n;
+	if (rShift < 0) {
+		rShift = 0;
 	}
-	s[j] = '\0';
+
+	int bitMask = ~(~0 << n);
+	
+	return (x >> rShift) & bitMask;
 }
