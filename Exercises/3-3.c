@@ -5,10 +5,10 @@
 void expand(char s1[], char s2[]);
 
 int main() {
-    char s1[SIZE] = "-14 a-z, A-G-Y, 0-9!";
+    char s1[SIZE] = "-14 a-z A-G-Y 0-9";
     char s2[SIZE] = "";
 
-    printf("%s%s\n", "Expand this: ", s1);
+    printf("%s%s\n", "Expand these: ", s1);
 
     expand(s1, s2);
     printf("%s\n", s2);
