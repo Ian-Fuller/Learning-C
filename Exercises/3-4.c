@@ -8,7 +8,7 @@ outside the range. This would cause the integer to loop back around to being a n
 #include <string.h>
 #include <limits.h>
 
-void itoa(int n, char []);
+void itoa(int n, char s[]);
 void reverse(char s[]);
 
 int main() {
