@@ -5,6 +5,8 @@
 
 #define MAXOP   100
 #define NUMBER  '0'
+#define ULETTER '1'
+#define LLETTER '2'
 
 #define BUFSIZE 100
 
@@ -27,6 +29,8 @@ int main() {
     int type;
     double op2;
     char s[MAXOP];
+
+    double variables[26] = {0};
 
     while ((type = getop(s)) != EOF) {
         switch (type) {
@@ -63,6 +67,12 @@ int main() {
             break;
         case NUMBER:
             push(atof(s));
+            break;
+        case ULETTER:
+            variables[(int)s[0] - 65] = pop();
+            break;
+        case LLETTER:
+            push(variables[(int)s[0] - 97]);
             break;
         case '+':
             push(pop() + pop());
@@ -112,6 +122,15 @@ int getop(char s[]) {
     // since the function is only supposed to get one charatcer, place a terminator at the second index, so only the first character remains
     s[1] = '\0';
     
+    // get variable operator
+    if (c >= 65 && c <= 90) {
+        return ULETTER;
+    }
+
+    if (c >= 97 && c <= 122) {
+        return LLETTER;
+    }
+
     // exit function if the character is anything that shouldn't be in a non-negative decimal value
     if (!isdigit(c) && c != '.') {
         return c;
