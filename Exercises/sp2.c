@@ -1,10 +1,24 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
+#include <stdlib.h>
 
-#define SIZE 2000
+int main()
+{
+    char *buffer;
+    size_t bufsize = 32;
+    size_t characters;
 
-int getbits(unsigned int x, int p, int n);
+    buffer = (char *)malloc(bufsize * sizeof(char));
+    if( buffer == NULL)
+    {
+        perror("Unable to allocate buffer");
+        exit(1);
+    }
 
-int main() {
-	int a = getchar();
-	printf("%c, %d\n", (char)a, a);
+    printf("Type something: ");
+    characters = getline(&buffer,&bufsize,stdin);
+    printf("%zu characters were read.\n",characters);
+    printf("You typed: '%s'\n",buffer);
+
+    return(0);
 }
