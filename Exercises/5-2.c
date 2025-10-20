@@ -3,18 +3,18 @@
 
 int getch(void);
 void ungetch(int);
-int getfloat(int*);
+int getfloat(float*);
 
 #define BUFSIZE 100
 char buf[BUFSIZE];
 int bufp = 0;
 
 int main () {
-    int myInt = 0;
+    float myFloat = 0;
 
     for (;;) {
-        getfloat(&myInt);
-        printf("You entered: %d\n", myInt);
+        getfloat(&myFloat);
+        printf("You entered: %f\n", myFloat);
     }
 
     return 0;
@@ -33,7 +33,7 @@ void ungetch(int c) {
     }
 }
 
-int getfloat(int *pn) {
+int getfloat(float *pn) {
     int c, sign;
 
     while (isspace(c = getch()));
@@ -50,6 +50,14 @@ int getfloat(int *pn) {
 
     for (*pn = 0; isdigit(c); c = getch()) {
         *pn = 10 * *pn + (c - '0');
+    }
+    if (c == '.') {
+        c = getch();
+        int place;
+        for (place = 1; isdigit(c); c = getch(), place *= 10) {
+            *pn = 10 * *pn + (c - '0');
+        }
+        *pn /= place;
     }
     *pn *= sign;
 
