@@ -1,24 +1,59 @@
-#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
 int main()
 {
-    char *buffer;
-    size_t bufsize = 32;
-    size_t characters;
+    // char a = 'A';
+    // char *p = &a;
+    // char **pp = &p;
+    // char **ppstart = pp;
 
-    buffer = (char *)malloc(bufsize * sizeof(char));
-    if( buffer == NULL)
-    {
-        perror("Unable to allocate buffer");
-        exit(1);
+    // printf("%c\n", **pp);
+
+    // **pp++;
+    // char b = 'B';
+    // *pp = &b;
+
+    // printf("%c\n", **pp);
+
+    int i, j;
+    char **array2d = {""};
+
+    for (i = 0; i < 2; i++) {
+        char allocator = '_';
+        char *array1d = &allocator;
+        // array2d = &array1d;
+
+        for (j = 0; j < 10; j++) {
+            *array1d = 65 + j;
+            array1d++;
+        }
+        *array1d = '\0';
+
+        array1d -= j;
+        // array2d = &array1d;
+        printf("%s\n", array1d);
+        printf("%s\n", *array2d);
+        array2d++;
     }
 
-    printf("Type something: ");
-    characters = getline(&buffer,&bufsize,stdin);
-    printf("%zu characters were read.\n",characters);
-    printf("You typed: '%s'\n",buffer);
+    // array2d -= i;
+    // for (i = 0; i < 10; i++) {
+    //     printf("%c", *array2d[i]);
+    // }
 
-    return(0);
+    printf("finised");
+
+    // for(i = 0; i < 2; i++) {
+    //     for (j = 0; j < 10; j++) {
+    //         printf("%c", **array2d);
+    //         *array2d++;
+    //     }
+
+    //     printf("\n");
+
+    //     array2d++;
+    // }
+
+    return 0;
 }

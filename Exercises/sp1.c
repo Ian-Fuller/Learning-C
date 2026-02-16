@@ -1,58 +1,37 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAXLINE 1000
+char* getField(char *s, char delimiter, int index);
 
-int getline(char *line, int max);
+int main() {
+    char *s1 = "Hello, World!";
+    char *s2 = "one two three";
 
-int main(int argc, char *argv[]) {
-    char line[MAXLINE];
-    long lineno = 0;
-    int c, except = 0, number = 0, found = 0;
+    printf("%s\n", getField(s1, ' ', 0));
+    printf("%s\n", getField(s1, ' ', 1));
+    printf("%s\n", getField(s2, ' ', 0));
+    printf("%s\n", getField(s2, ' ', 1));
+    printf("%s\n", getField(s2, ' ', 2));
 
-    while (--argc > 0 && (*++argv)[0] == '-') {
-        while (c = *++argv[0]) {
-            switch (c) {
-                case 'x':
-                    except = 1;
-                    break;
-                case 'n':
-                    number = 1;
-                    break;
-                default:
-                    printf("find: illegal option %c\n", c);
-                    argc = 0;
-                    found = -1;
-                    break;
-            }
-        }
-    }
-
-    if (argc != 1) {
-        printf("Usage: find -x -n pattern\n");
-    }
-    else {
-        while (getline(line, MAXLINE) > 0) {
-            lineno++;
-            if ((strstr(line, *argv) != NULL) != except) {
-                if (number) {
-                    printf("%ld: ", lineno);
-                }
-                printf("%s", line);
-                found++;
-            }
-        }
-    }
-
-    return found;
+    return 0;
 }
 
-int getline(char *line, int max) {
-    char *start = line;
+char* getField(char *s, char delimiter, int index) {
+    char *substrings[1000];
+    char *start = substrings;
 
-    while((*line++ = getchar()) != '\n');
-    *line++ = '\n';
-    *line = '\0';
+    int i = 0;
+    do {
+        if (*s != delimiter) {
+            *substrings[i] = *s;
+            i++;
+        }
+        else {
+            *substrings[i] = '\0';
+            // substrings++;
+            i = 0;
+        }
+    } while (*++s != '\0');
 
-    return line - start;
+    return *(start += index);
 }
