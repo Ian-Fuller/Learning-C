@@ -1,37 +1,55 @@
 #include <stdio.h>
 #include <string.h>
 
-char* getField(char *s, char delimiter, int index);
+#define SIZE 1000
+
+void getField(char *s, char *t, char delimiter, int index);
 
 int main() {
     char *s1 = "Hello, World!";
     char *s2 = "one two three";
 
-    printf("%s\n", getField(s1, ' ', 0));
-    printf("%s\n", getField(s1, ' ', 1));
-    printf("%s\n", getField(s2, ' ', 0));
-    printf("%s\n", getField(s2, ' ', 1));
-    printf("%s\n", getField(s2, ' ', 2));
+    char output[SIZE];
+
+    getField(s1, output, ' ', 0);
+    printf("%s\n", output);
+    getField(s1, output, ' ', 1);
+    printf("%s\n", output);
+    getField(s2, output, ' ', 0);
+    printf("%s\n", output);
+    getField(s2, output, ' ', 1);
+    printf("%s\n", output);
+    getField(s2, output, ' ', 2);
+    printf("%s\n", output);
 
     return 0;
 }
 
-char* getField(char *s, char delimiter, int index) {
-    char *substrings[1000];
-    char *start = substrings;
+void getField(char *s, char *t, char delimiter, int index) {
+    char substrings[SIZE][SIZE];
+    int i, j;
 
-    int i = 0;
-    do {
+    i = 0;
+    j = 0;
+    while (*s != '\0') {
         if (*s != delimiter) {
-            *substrings[i] = *s;
-            i++;
+            substrings[i][j] = *s;
+            j++;
         }
         else {
-            *substrings[i] = '\0';
-            // substrings++;
-            i = 0;
+            substrings[i][j] = '\0';
+            i++;
+            j = 0;
         }
-    } while (*++s != '\0');
 
-    return *(start += index);
+        s++;
+    }
+
+
+    i = 0;
+    while (substrings[index][i] != '\0') {
+        t[i] = substrings[index][i];
+        i++;
+    }
+    t[i] = '\0';
 }

@@ -10,68 +10,25 @@ based on the individual fields, like first name, last name, or age. Space being 
 #include <stdio.h>
 #include <string.h>
 
+#define MAXLEN 1000
 #define MAXLINES 5000
 char *lineptr[MAXLINES];
 
 int readlines(char *lineptr[], int nlines);
 void writelines(char *lineptr[], int nlines, int reverse);
 
-void myQsort(void *lineptr[], int left, int right, int (*comp)(void *, void *));
+void myQsort(void *lineptr[], int left, int right, int (*comp)(void *, void *), int fieldIndex);
 
 int numcmp(char*, char *);
 int strcmp_ignorecase(char*, char*);
 int strcmp_directory(char*, char*);
 int strcmp_ignorecase_directory(char*, char*);
 
-char* getField(char *s, char delimiter, int index);
+void getField(char *s, char *t, char delimiter, int index);
+
+int reverse = 0;
 
 int main(int argc, char *argv[]) {
-    // int nlines;
-    // int numeric = 0;
-    // int reverse = 0;
-    // int fold = 0;
-    // int directory = 0;
-    // int delimiter = 0;
-
-    // while (--argc > 0) {
-    //     ++argv;
-    //     if (strcmp(*argv, "-n") == 0) {
-    //         numeric = 1;
-    //     }
-    //     if (strcmp(*argv, "-r") == 0) {
-    //         reverse = 1;
-    //     }
-    //     if (strcmp(*argv, "-f") == 0) {
-    //         fold = 1;
-    //     }
-    //     if (strcmp(*argv, "-d") == 0) {
-    //         directory = 1;
-    //     }
-    //     if (strcmp(*argv, "-s")) { // space
-    //         delimiter = ' ';
-    //     }
-    //     if (strcmp(*argv, "-t")) { // tab
-    //         delimiter = '\t';
-    //     }
-    //     if (strcmp(*argv, "-c")) { // comma
-    //         delimiter = ',';
-    //     }
-    // }
-
-    // if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
-    //     myQsort((void **)lineptr, 0, nlines-1, (int (*)(void*, void*))(
-    //         numeric ? numcmp : (
-    //             (fold && directory) ? strcmp_ignorecase_directory : (
-    //                 fold ? strcmp_ignorecase : (
-    //                     directory ? strcmp_directory : strcmp
-    //     )))));
-    //     writelines(lineptr, nlines, reverse);
-    //     return 0;
-    // }
-    // else {
-    //     printf("input too big to sort\n");
-    //     return 1;
-    // }
     int nlines;
     if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
         argv += argc - 1;
@@ -79,7 +36,6 @@ int main(int argc, char *argv[]) {
         argc += (argc == 1) ? 1 : 0;
         while (--argc > 0) {
             int numeric = 0;
-            int reverse = 0; // need to rework how lines are reversed
             int fold = 0;
             int directory = 0;
 
@@ -91,7 +47,7 @@ int main(int argc, char *argv[]) {
                             numeric = 1;
                             break;
                         case 'r':
-                            reverse = 1;
+                            reverse = -1;
                             break;
                         case 'f':
                             fold = 1;
@@ -105,33 +61,35 @@ int main(int argc, char *argv[]) {
                 }
             }
 
+            argv--;
+            
             if (numeric == 1) {
-                myQsort(lineptr, 0, nlines - 1, numcmp);
+                myQsort(lineptr, 0, nlines - 1, numcmp, argc - 1);
             }
             else if (fold == 1 && directory == 1) {
-                myQsort(lineptr, 0, nlines - 1, strcmp_ignorecase_directory);
+                myQsort(lineptr, 0, nlines - 1, strcmp_ignorecase_directory, argc - 1);
             }
             else if (fold == 1) {
-                myQsort(lineptr, 0, nlines - 1, strcmp_ignorecase);
+                myQsort(lineptr, 0, nlines - 1, strcmp_ignorecase, argc - 1);
             }
             else if (directory == 1) {
-                myQsort(lineptr, 0, nlines - 1, strcmp_directory);
+                myQsort(lineptr, 0, nlines - 1, strcmp_directory, argc - 1);
             }
             else {
-                myQsort(lineptr, 0, nlines - 1, strcmp); // need a way to tell myQsort how to make the substring
+                myQsort(lineptr, 0, nlines - 1, strcmp, argc - 1);
             }
 
-            writelines(lineptr, nlines, reverse);
-            return 0;
+            reverse = 0;
         }
+
+        writelines(lineptr, nlines, 0);
+        return 0;
     }
     else {
         printf("input too big to sort\n");
         return 1;
     }
 }
-
-#define MAXLEN 1000
 
 int getline(char *, int);
 char *alloc(int);
@@ -201,7 +159,7 @@ char *alloc(int n) {
     }
 }
 
-void myQsort(void *v[], int left, int right, int (*comp)(void *, void *)) {
+void myQsort(void *v[], int left, int right, int (*comp)(void *, void *), int fieldIndex) {
     int i, last;
     void swap(void *v[], int, int);
 
@@ -212,13 +170,51 @@ void myQsort(void *v[], int left, int right, int (*comp)(void *, void *)) {
     swap(v, left, (left + right) / 2);
     last = left;
     for (i = left + 1; i <= right; i++) {
-        if ((*comp)(v[i], v[left]) < 0) {
+        char field1[MAXLEN];
+        char field2[MAXLEN];
+        getField(v[i], field1, ' ', fieldIndex);
+        getField(v[left], field2, ' ', fieldIndex);
+        if ((*comp)(field1, field2) * reverse < 0) {
             swap(v, ++last, i);
         }
     }
     swap(v, left, last);
-    myQsort(v, left, last - 1, comp);
-    myQsort(v, last + 1, right, comp);
+    myQsort(v, left, last - 1, comp, fieldIndex);
+    myQsort(v, last + 1, right, comp, fieldIndex);
+}
+
+/*
+If I type John Baker 2000\n John Adams 2000\n Jay Zimmer 2000\n as input, first Adams and Baker get swapped and Zimmer stays in the same place
+Next, Jay and John get swapped, but Adams is the one that gets swapped with Zimmer instead of Baker, and that's why last names are out of order
+*/
+
+void getField(char *s, char *t, char delimiter, int index) {
+    char substrings[MAXLEN][MAXLEN];
+    int i, j;
+
+    i = 0;
+    j = 0;
+    while (*s != '\0') {
+        if (*s != delimiter) {
+            substrings[i][j] = *s;
+            j++;
+        }
+        else {
+            substrings[i][j] = '\0';
+            i++;
+            j = 0;
+        }
+
+        s++;
+    }
+
+
+    i = 0;
+    while (substrings[index][i] != '\0') {
+        t[i] = substrings[index][i];
+        i++;
+    }
+    t[i] = '\0';
 }
 
 #include <stdlib.h>
@@ -263,6 +259,7 @@ int strcmp_ignorecase(char *s1, char * s2) {
 }
 
 int strcmp_directory(char *s1, char *s2) {
+    printf("%s, %s\n", s1, s2);
     while (*s1 != '\0' && *s2 != '\0') {
         char c1 = *s1;
         char c2 = *s2;
@@ -323,22 +320,4 @@ void swap(void *v[], int i, int j) {
     temp = v[i];
     v[i] = v[j];
     v[j] = temp;
-}
-
-char* getField(char *s, char delimiter, int index) {
-    char **substrings;
-    char *start = substrings;
-
-    do {
-        if (*s != delimiter) {
-            **substrings = *s;
-            *substrings++;
-        }
-        else {
-            **substrings = '\0';
-            substrings++;
-        }
-    } while (*++s != '\0');
-
-    return start += index;
 }
