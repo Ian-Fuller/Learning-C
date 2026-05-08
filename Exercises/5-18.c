@@ -32,6 +32,7 @@ int main() {
         dcl();
         if (tokentype != '\n') {
             printf("syntax error\n");
+            while (gettoken() != '\n');
         }
         printf("%s: %s %s\n", name, out, datatype);
     }
@@ -85,6 +86,7 @@ void dirdcl(void) {
         dcl();
         if (tokentype != ')') {
             printf("error: missing )\n");
+            while (gettoken() != ')');
         }
     }
     else if (tokentype == NAME) {
@@ -92,6 +94,7 @@ void dirdcl(void) {
     }
     else {
         printf("error: expected name or (dcl)\n");
+        dcl();
     }
     while ((type = gettoken()) == PARENS || type == BRACKETS) {
         if (type == PARENS) {
